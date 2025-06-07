@@ -9,14 +9,13 @@ const EMAIL_SENDER = process.env.EMAIL_SENDER;
 const EMAIL_RECEIVER = process.env.EMAIL_RECEIVER;
 
 function writeLog(entry) {
-  const logLine = `${new Date().toISOString()} - ${entry}\n`;
+  const logLine = `${new Date().toLocaleString("en-GB", { timeZone: "Europe/Oslo" })} - ${entry}\n`;
   fs.appendFile("email_log.txt", logLine, (err) => {
     if (err) {
-      console.error("Error writing the log:", err);
+      console.error("❌ Error writing to log file:", err);
     }
   });
 }
-
 async function sendMorningEmail() {
   try {
     const transporter = nodemailer.createTransport({
