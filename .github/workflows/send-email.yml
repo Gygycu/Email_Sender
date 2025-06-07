@@ -2,28 +2,23 @@ name: Send morning email
 
 on:
   schedule:
-    - cron: '15 8 * * *'  # rulează zilnic la 08:15 UTC
+    - cron: '0 7 * * *'  # Rulează în fiecare zi la 7:00 dimineața (UTC)
+  workflow_dispatch:     # Poți rula manual workflow-ul din GitHub UI
 
 jobs:
-  send-email:
+  send_email:
     runs-on: ubuntu-latest
-
+    env:
+      EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
       - name: Install dependencies
         run: npm install
-
-      - name: Run morning email script
+      - name: Run email script
         run: node morning_email.js
-
-      - name: Upload email log
-        uses: actions/upload-artifact@v3
-        with:
-          name: email-log
-          path: email_log.txt
